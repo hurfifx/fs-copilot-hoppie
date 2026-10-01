@@ -1,0 +1,108 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <RootNamespace>FsCopilot</RootNamespace>
+        <ApplicationIcon>Assets/fscopilot.ico</ApplicationIcon>
+        <Version>1.2-rc1</Version>
+
+        <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+        <Platforms>x64;AnyCPU</Platforms>
+
+        <PublishSingleFile>true</PublishSingleFile>
+        <SelfContained>true</SelfContained>
+        <PublishTrimmed>false</PublishTrimmed>     <!-- try to trim later -->
+        <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+        <DebugType>none</DebugType>
+        <ErrorReport>none</ErrorReport>
+        <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <AvaloniaResource Include="Assets\icon.svg"/>
+        <AvaloniaResource Include="Assets\fscopilot.ico"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="Assets\connect.wav" />
+        <EmbeddedResource Include="Assets\disconnect.wav" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="Sounds\**\*.wav"
+                 CopyToOutputDirectory="PreserveNewest"
+                 CopyToPublishDirectory="Always"
+                 ExcludeFromSingleFile="true"
+                 TargetPath="Sounds\%(RecursiveDir)%(Filename)%(Extension)" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia" Version="11.3.9" />
+        <PackageReference Include="Avalonia.Desktop" Version="11.3.9" />
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.9" />
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.9" />
+        <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+        <PackageReference Include="Avalonia.Diagnostics" Version="11.3.9">
+            <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
+            <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Jint" Version="4.4.1" />
+        <PackageReference Include="LiteNetLib" Version="1.3.1" />
+        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.10"/>
+        <PackageReference Include="Open.Nat.V2" Version="3.1.1" />
+        <PackageReference Include="ReactiveUI.Avalonia" Version="11.3.8" />
+        <PackageReference Include="ReactiveUI.Avalonia.Microsoft.Extensions.DependencyInjection" Version="11.3.8" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0"/>
+        <PackageReference Include="Serilog.Sinks.File" Version="7.0.0"/>
+        <PackageReference Include="System.Reactive" Version="6.1.0"/>
+        <PackageReference Include="System.Windows.Extensions" Version="10.0.3" />
+        <PackageReference Include="YamlDotNet" Version="16.3.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="..\Definitions\**\*">
+            <Link>Definitions\%(RecursiveDir)%(Filename)%(Extension)</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+        </Content>
+    </ItemGroup>
+
+<!--    <ItemGroup>-->
+<!--        <Content Include="..\FsCopilot.Bridge\Packages\**\*">-->
+<!--            <Link>Community\%(RecursiveDir)%(Filename)%(Extension)</Link>-->
+<!--            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>-->
+<!--            <CopyToPublishDirectory>Always</CopyToPublishDirectory>-->
+<!--        </Content>-->
+<!--    </ItemGroup>-->
+
+    <ItemGroup>
+        <None Include="..\FsCopilot.Bridge\Packages\**\*"
+              CopyToOutputDirectory="PreserveNewest"
+              CopyToPublishDirectory="Always"
+              ExcludeFromSingleFile="true"
+              TargetPath="Community\%(RecursiveDir)%(Filename)%(Extension)" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="Microsoft.FlightSimulator.SimConnect">
+            <HintPath>Microsoft.FlightSimulator.SimConnect.dll</HintPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </Reference>
+
+        <None Include="SimConnect.dll">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </None>
+    </ItemGroup>
+
+</Project>
